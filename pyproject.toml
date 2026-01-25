@@ -1,0 +1,17 @@
+[project]
+name = "ai_vtg_whats_bot"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "aiohttp>=3.12.15",
+    "alembic>=1.17.1",
+    "asyncpg>=0.30.0",
+    "langchain>=0.3.27",
+    "langchain-community>=0.3.27",
+    "langchain-ollama>=1.0.0",
+    "langchain-openai>=0.3.28",
+    "langgraph>=1.0.1",
+    "python-dotenv>=1.1.1",
+]
