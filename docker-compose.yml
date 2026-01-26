@@ -4,6 +4,22 @@ networks:
   dev:
 
 services:
+  ollama:
+    container_name: ollama
+    image: docker.io/ollama/ollama:latest
+    # Если официального образа нет, замените на подходящий или используйте команду run на хосте.
+    restart: always
+    ports:
+      - "11434:11434"
+    volumes:
+      # если Ollama использует директорию для моделей/данных, пробросьте её
+      - ./ollama-data:/root/.ollama
+    networks:
+      - dev
+    environment:
+      # при необходимости переменные окружения Ollama
+      - TZ=Asia/Almaty
+  
   db:
     container_name: postgres
     image: postgres
@@ -30,6 +46,7 @@ services:
     container_name: greenbot
     depends_on:
       - db
+      - ollama
     build:
       context: .
     restart: always
