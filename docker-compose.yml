@@ -1,0 +1,40 @@
+version: '3.9'
+
+networks:
+  dev:
+
+services:
+  db:
+    container_name: postgres
+    image: postgres
+    restart: always
+    
+    ports:
+      - 5432:5432
+    networks:
+      - dev
+    
+    env_file:
+      - ".env"
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - dev
+  
+  greenbot:
+    container_name: greenbot
+    depends_on:
+      - db
+    build:
+      context: .
+    restart: always
+    
+    env_file:
+      - ".env"
+    networks:
+      - dev

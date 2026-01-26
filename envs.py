@@ -3,7 +3,8 @@ from os import getenv
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
-DATABASE_URL = str(getenv('DB_URL'))
+# DATABASE_URL = str(getenv('DB_URL'))
+DATABASE_URL = f"postgresql+asyncpg://{getenv('POSTGRES_USER')}:{getenv('POSTGRES_PASSWORD')}@db:5432/{getenv('POSTGRES_DB')}"
 GREEN_API_URL = str(getenv('GREEN_URL'))
 TOKEN = str(getenv('TOKEN'))
 WEBHOOK_URL = str(getenv('URL_WEBHOOK'))
