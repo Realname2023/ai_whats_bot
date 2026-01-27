@@ -10,15 +10,14 @@ services:
     # Если официального образа нет, замените на подходящий или используйте команду run на хосте.
     restart: always
     ports:
-      - "11434:11434"
+      - 11434:11434
     volumes:
       # если Ollama использует директорию для моделей/данных, пробросьте её
       - ./ollama-data:/root/.ollama
     networks:
       - dev
-    environment:
-      # при необходимости переменные окружения Ollama
-      - TZ=Asia/Almaty
+    env_file:
+      - ".env"
   
   db:
     container_name: postgres
