@@ -6,7 +6,7 @@ networks:
 services:
   ollama:
     container_name: ollama
-    image: docker.io/ollama/ollama:latest
+    image: ollama/ollama:latest
     # Если официального образа нет, замените на подходящий или используйте команду run на хосте.
     restart: always
     ports:
@@ -57,8 +57,6 @@ services:
     environment:
       # укажите URL Ollama (локально на хосте)
       - LANGCHAIN_OLLAMA_HOST=http://localhost:11434
-    volumes:
-      - ./:/aibot
-    
+
     networks:
       - dev
