@@ -54,9 +54,5 @@ services:
     env_file:
       - ".env"
 
-    environment:
-      # укажите URL Ollama (локально на хосте)
-      - LANGCHAIN_OLLAMA_HOST=http://ollama:11434
-
     networks:
       - dev
