@@ -17,8 +17,8 @@ services:
 
     networks:
       - dev
-    environment:
-      - OLLAMA_HOST=0.0.0.0
+    # environment:
+    #   - OLLAMA_HOST=0.0.0.0
     #   - LANGCHAIN_OLLAMA_HOST=http://ollama:11434
     # env_file:
     #   - ".env"
