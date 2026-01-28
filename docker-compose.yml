@@ -18,9 +18,10 @@ services:
     networks:
       - dev
     environment:
-      - LANGCHAIN_OLLAMA_HOST=http://ollama:11434
-    env_file:
-      - ".env"
+      - OLLAMA_HOST=0.0.0.0
+    #   - LANGCHAIN_OLLAMA_HOST=http://ollama:11434
+    # env_file:
+    #   - ".env"
   
   db:
     container_name: postgres
