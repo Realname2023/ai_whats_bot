@@ -5,7 +5,7 @@ from ai_agent.tools import agent_tools
 
 checkpointer = InMemorySaver()
 
-llm = ChatOllama(model="ministral-3:3b-cloud",  host='http://ollama:11434')#,model = "qwen2.5-coder:0.5b" deepseek-v3.1:671b-cloud gpt-oss:120b-cloud
+llm = ChatOllama(model="deepseek-r1:1.5b",  host='http://ollama:11434')#,model = "qwen2.5-coder:0.5b" deepseek-v3.1:671b-cloud gpt-oss:120b-cloud
 
 agent = create_agent(
     model = llm,
