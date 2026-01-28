@@ -7,6 +7,7 @@ services:
   ollama:
     container_name: ollama
     image: ollama/ollama:latest
+    command: ollama serve --bind 0.0.0.0
     # Если официального образа нет, замените на подходящий или используйте команду run на хосте.
     restart: always
     ports:
