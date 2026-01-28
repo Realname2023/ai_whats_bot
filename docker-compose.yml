@@ -14,15 +14,13 @@ services:
     volumes:
       # если Ollama использует директорию для моделей/данных, пробросьте её
       - ./ollama-data:/root/.ollama
-
+    # pull_policy: always
+    tty: true
     networks:
       - dev
     environment:
       - OLLAMA_KEEP_ALIVE=24h
       - OLLAMA_HOST=0.0.0.0
-    #   - LANGCHAIN_OLLAMA_HOST=http://ollama:11434
-    # env_file:
-    #   - ".env"
   
   db:
     container_name: postgres
