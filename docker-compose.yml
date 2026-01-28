@@ -14,10 +14,11 @@ services:
     volumes:
       # если Ollama использует директорию для моделей/данных, пробросьте её
       - ./ollama-data:/root/.ollama
-    command: ["-d", "-v", "ollama:/root/.ollama", "-p", "11434:11434"]
-    
+
     networks:
       - dev
+    environment:
+      - LANGCHAIN_OLLAMA_HOST=http://ollama:11434
     env_file:
       - ".env"
   
