@@ -15,12 +15,13 @@ services:
       # если Ollama использует директорию для моделей/данных, пробросьте её
       - ./ollama-data:/root/.ollama
     # pull_policy: always
-    tty: true
+    # tty: true
     networks:
       - dev
-    environment:
-      - OLLAMA_KEEP_ALIVE=-1
-      - OLLAMA_HOST=0.0.0.0
+    
+    env_file:
+      - ".env"
+
   
   db:
     container_name: postgres
