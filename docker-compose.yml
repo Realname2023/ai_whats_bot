@@ -52,7 +52,7 @@ services:
       - ollama
     build:
       context: .
-    restart: always
+    restart: unless-stopped
     
     env_file:
       - ".env"

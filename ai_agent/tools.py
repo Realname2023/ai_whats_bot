@@ -39,7 +39,7 @@ async def get_all_gases() -> str:
     items = await seleact_all_gases()
     return '\n-------------------------\n'.join(f"""Фото: {item.photo} ID товара: {item.id}, 
     название: {item.name}, единица измерения: {item.unit}, цена: {item.price} тенге, 
-    цена доставки: {item.delivery_price} тенге, условия доставки: {item.delivery_terms}, 
+    цена вместе с доставкой: {item.delivery_price} тенге, условия доставки: {item.delivery_terms}, 
     филиал: {item.branch.name}""" for item in items)
 
 
@@ -98,7 +98,7 @@ async def add_user_cart(user_id: str, product_id: int, quantity: int, is_deliver
     if is_delivery is True and good.is_delivery is False:
         return F"Извините доставку {good.name} не осуществляем"
     elif is_delivery is True and good.is_delivery is True:
-        total_price = quantity*(good.price + good.delivery_price)
+        total_price = quantity*good.delivery_price
     else:
         total_price = quantity*good.price
     cart_in = CartAddBase(
