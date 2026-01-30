@@ -17,6 +17,7 @@ async def get_message():
             if api_answer is not None:
                 message = None
                 chat_id = None
+                chat_name = None
                 if "messageData" in api_answer["body"]:
                     if "textMessageData" in api_answer["body"]["messageData"]:
                         message = api_answer["body"]["messageData"]["textMessageData"]["textMessage"]
@@ -36,13 +37,13 @@ async def get_message():
                 if message is None or chat_id is None:
                     return False
                 else:
-                    return chat_id, message
+                    return chat_id, chat_name, message
             else:
                 return False
 
 
-async def send_message(chat_id: str, message: str):
-    answer = await chat_chain_graph(message, chat_id)
+async def send_message(chat_id: str, chat_name: str, message: str):
+    answer = await chat_chain_graph(message, chat_id, chat_name)
     match = re.search(pattern, answer)
     if match:
         image_url = match.group(0)
@@ -75,8 +76,8 @@ async def main():
         data = await get_message()
         print(data)
         if data:
-            chat_id, message = data
-            await send_message(chat_id, message)
+            chat_id, chat_name, message = data
+            await send_message(chat_id, chat_name, message)
 
 
 if __name__ == "__main__":

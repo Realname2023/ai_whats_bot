@@ -15,10 +15,12 @@ async def get_company_info() -> str:
 
 @tool
 async def get_branches_company():
-    """Получает филиалы, города компании. Цены на газы отличаются в зависимости от города, филиала.
+    """Получает информацию о филиалах, городах компании (адреса, графики работы).
+    Цены на газы отличаются в зависимости от города, филиала.
     """
     cities = await select_all_cities()
-    return '\n----------\n'.join(f'ID города: {city.id}, название: {city.name}' for city in cities)
+    return '\n----------\n'.join(f"""ID города: {city.id}, название: {city.name}, 
+                                описание: {city.description}""" for city in cities)
 
 
 @tool
@@ -183,7 +185,7 @@ async def send_order(user_id: str):
 
     await b24rest_request(WEBHOOK_URL, method_products_set, parametr_products_set)
     await delete_user_carts(user_id=user_id)
-    # return 'Заказ успешно отправлен менеджеру'
+    return 'Заказ успешно отправлен менеджеру'
 
 
 agent_tools = [get_company_info, get_branches_company, get_categories_of_goods,get_all_gases, 

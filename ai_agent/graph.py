@@ -36,9 +36,9 @@ checkpointer = InMemorySaver()
 app = graph.compile(checkpointer=checkpointer)
 
 
-async def chat_chain_graph(user_message: str, user_id: str):
+async def chat_chain_graph(user_message: str, user_id: str, user_name: str):
     
-    message = f'Сообщение от клиента user_id: {user_id}\n{user_message}'
+    message = f'Сообщение от клиента {user_name} user_id: {user_id}\n{user_message}'
     state = AgentState(
     user_id=user_id,
     messages=[HumanMessage(content=message)]
