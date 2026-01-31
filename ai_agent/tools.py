@@ -88,8 +88,7 @@ async def get_product_description(product_id):
 
 @tool(args_schema=CartBase)
 async def add_user_cart(user_id: str, product_id: int, quantity: int, is_delivery: bool):
-    """Добавляет корзину пользователя, а также обновляет корзину если такой товар уже есть 
-    в корзине пользователя
+    """Добавляет и обновляет корзину пользователя для того чтобы отправить заказ менеджеру.
          Args:
             user_id: str ID пользователя
             product_id: int ID товара для заказа
