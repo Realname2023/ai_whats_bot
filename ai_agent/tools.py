@@ -1,10 +1,10 @@
 from langchain.tools import tool
 from envs import (about_company, WEBHOOK_URL, b24rest_request, method_deal_add, method_contact_list, 
                         method_contact_update, method_contact_add, method_products_set)
-from data_base.anotations import (GoodBase, CartBase, CartAddBase, OrderBase)
+from data_base.anotations import (GoodBase, OrderBase)
 from data_base.orm_query import (select_all_categories, seleact_all_gases, select_gas_cylinders, 
                                 select_all_cities, select_product, select_services, select_liquefied_gases, 
-                                add_cart, get_user, get_user_carts, delete_user_carts)
+                                get_user)
 
 
 @tool
@@ -86,44 +86,24 @@ async def get_product_description(product_id):
     return f'{product.photo}\n{product.name}\n{product.description}'
 
 
-@tool(args_schema=CartBase)
-async def add_user_cart(user_id: str, product_id: int, quantity: int, is_delivery: bool):
-    """Добавляет и обновляет корзину пользователя для того чтобы отправить заказ менеджеру.
-         Args:
+@tool(args_schema=OrderBase)
+async def send_order(user_id: str, product_id: int, quantity: int, is_delivery: bool):
+    """Отправляет заказ менеджеру.
+        Args:
             user_id: str ID пользователя
             product_id: int ID товара для заказа
             quantity: int количество заказываемого товара
             is_delivery: bool нужно ли сделать доставку товара
     """
-    good = await select_product(good_id=product_id)
-    if is_delivery is True and good.is_delivery is False:
-        return F"Извините доставку {good.name} не осуществляем"
-    elif is_delivery is True and good.is_delivery is True:
-        total_price = quantity*good.delivery_price
-    else:
-        total_price = quantity*good.price
-    cart_in = CartAddBase(
-        user_id=user_id,
-        product_id=product_id,
-        quantity=quantity,
-        total_price=total_price
-    )
-
-    await add_cart(cart_in=cart_in)
-    return 'Товар успешно добавлен в корзину'
-
-
-@tool(args_schema=OrderBase)
-async def send_order(user_id: str):
-    """Отправляет заказ менеджеру.
-        Всю информацию о пользователе и его корзинах получает из базы данных,
-        которые сформированы в процессе переписки с пользователе через его user_id
-        Args:
-            user_id: str ID пользователя
-    """
     user = await get_user(user_id=user_id)
+    product = await select_product(good_id=product_id)
+    if is_delivery is True and product.is_delivery is False:
+        return F"Извините доставку {product.name} не осуществляем"
+    elif is_delivery is True and product.is_delivery is True:
+        price = product.delivery_price
+    else:
+        price = product.price
     tittle = user.full_name
-    user_carts = await get_user_carts(user_id=user_id)
     client_phone = user.phone_number
 
     parametr_contact_list = {
@@ -164,29 +144,21 @@ async def send_order(user_id: str):
     response = await b24rest_request(WEBHOOK_URL, method_deal_add, parametr_deal_add)
 
     deal_id = str(response.get('result'))
-    poses = []
-
-    if user_carts != []:
-        for ret in user_carts:
-            quantity = ret.quantity
-            price = ret.product.price
-
-            pos = {"PRODUCT_NAME": ret.product.name,
+    poses = [{"PRODUCT_NAME": product.name,
                 "PRICE": float(price),
                 "QUANTITY": quantity,
-                "MEASURE_NAME": ret.product.unit
-                }
-            poses.append(pos)
+                "MEASURE_NAME": product.unit
+                }]
     
     parametr_products_set = {
         "id": deal_id,
         "rows": poses}
 
     await b24rest_request(WEBHOOK_URL, method_products_set, parametr_products_set)
-    await delete_user_carts(user_id=user_id)
+
     return 'Заказ успешно отправлен менеджеру'
 
 
 agent_tools = [get_company_info, get_branches_company, get_categories_of_goods,get_all_gases, 
                 get_all_gas_cylinders, get_all_services, get_all_liquefied_gases,
-                get_product_description, add_user_cart, send_order]
+                get_product_description, send_order]

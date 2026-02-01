@@ -2,7 +2,7 @@ from sqlalchemy import select, delete
 from sqlalchemy.orm import joinedload
 from data_base.engine import session_maker
 from data_base.models import Product, User, Category, Cart, Branch
-from data_base.anotations import CartAddBase
+# from data_base.anotations import CartAddBase
 
 
 async def add_user(user_id: str, full_name: str | None = None,
@@ -73,47 +73,47 @@ async def select_product(good_id: int):
         return result.scalar_one()
 
 
-async def add_cart(cart_in: CartAddBase):
-    async with session_maker() as session:
-        cart = Cart(**cart_in.model_dump())
-        query = select(Cart).where(Cart.user_id == cart.user_id, 
-                                   Cart.product_id == cart.product_id)
-        result = await session.execute(query)
-        user_cart = result.scalar()
-        if user_cart:
-            for name, value in cart_in.model_dump(exclude_unset=True).items():
-                setattr(user_cart, name, value)
-        else:
-            user_cart = cart
-            session.add(user_cart)
+# async def add_cart(cart_in: CartAddBase):
+#     async with session_maker() as session:
+#         cart = Cart(**cart_in.model_dump())
+#         query = select(Cart).where(Cart.user_id == cart.user_id, 
+#                                    Cart.product_id == cart.product_id)
+#         result = await session.execute(query)
+#         user_cart = result.scalar()
+#         if user_cart:
+#             for name, value in cart_in.model_dump(exclude_unset=True).items():
+#                 setattr(user_cart, name, value)
+#         else:
+#             user_cart = cart
+#             session.add(user_cart)
         
-        await session.commit()
-        return user_cart
+#         await session.commit()
+#         return user_cart
 
 
-async def get_user_carts(user_id: str):
-    async with session_maker() as session:
-        query = select(Cart).where(Cart.user_id == user_id)
-        result = await session.execute(query)
-        return result.scalars().all()
+# async def get_user_carts(user_id: str):
+#     async with session_maker() as session:
+#         query = select(Cart).where(Cart.user_id == user_id)
+#         result = await session.execute(query)
+#         return result.scalars().all()
 
 
-async def select_cart(user_id: int, good_id):
-    async with session_maker() as session:
-        query = select(Cart).where(Cart.user_id == user_id, Cart.product_id == good_id)
-        result = await session.execute(query)
-        return result.scalar()
+# async def select_cart(user_id: int, good_id):
+#     async with session_maker() as session:
+#         query = select(Cart).where(Cart.user_id == user_id, Cart.product_id == good_id)
+#         result = await session.execute(query)
+#         return result.scalar()
 
 
-async def delete_user_cart(user_id: str, good_id: int):
-    async with session_maker() as session:
-        query = delete(Cart).where(Cart.user_id == user_id, Cart.product_id == good_id)
-        await session.execute(query)
-        await session.commit()
+# async def delete_user_cart(user_id: str, good_id: int):
+#     async with session_maker() as session:
+#         query = delete(Cart).where(Cart.user_id == user_id, Cart.product_id == good_id)
+#         await session.execute(query)
+#         await session.commit()
 
 
-async def delete_user_carts(user_id: str):
-    async with session_maker() as session:
-        query = delete(Cart).where(Cart.user_id == user_id)
-        await session.execute(query)
-        await session.commit()
+# async def delete_user_carts(user_id: str):
+#     async with session_maker() as session:
+#         query = delete(Cart).where(Cart.user_id == user_id)
+#         await session.execute(query)
+#         await session.commit()
