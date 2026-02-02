@@ -9,7 +9,8 @@ from data_base.orm_query import (select_all_categories, seleact_all_gases, selec
 
 @tool
 async def get_company_info() -> str:
-    """Получает информацию о компании которую ты будешь представлять"""
+    """Получает информацию о компании которую ты будешь представлять.
+    А также о контактах, способах оплаты и клиентах компании"""
     return about_company
 
 
