@@ -43,7 +43,6 @@ class Category(Base):
     verbose_name: Mapped[str] = mapped_column(String(500), nullable=True)
 
     products: Mapped[List['Product']] = relationship(back_populates="category", lazy="selectin")
-    # arenda_goods: Mapped[List['ArendaGood']] = relationship(back_populates="category", lazy="selectin")
 
     def __str__(self):
         return self.name
