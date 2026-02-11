@@ -18,17 +18,14 @@ async def get_message():
                 message = None
                 chat_id = None
                 chat_name = None
-                if "messageData" in api_answer["body"]:
-                    if "textMessageData" in api_answer["body"]["messageData"]:
-                        message = api_answer["body"]["messageData"]["textMessageData"]["textMessage"]
-                        chat_id = api_answer["body"]["senderData"]["chatId"]
+                phone_number = None
                 receipt_id = api_answer.get("receiptId")
                 if receipt_id:
                     if api_answer["body"].get('typeWebhook') == 'incomingMessageReceived':
+                        message = api_answer["body"]["messageData"]["textMessageData"]["textMessage"]
                         chat_id = api_answer["body"]["senderData"]["chatId"]
                         chat_name = api_answer["body"]["senderData"]["chatName"]
                         phone_number = chat_id.replace('@c.us', '')
-                        await add_user(user_id=chat_id, full_name=chat_name, phone_number=phone_number)
 
                     id_del_url = f'{del_url}/{receipt_id}'
                     await session.delete(url=id_del_url)
@@ -37,6 +34,7 @@ async def get_message():
                 if message is None or chat_id is None:
                     return False
                 else:
+                    await add_user(user_id=chat_id, full_name=chat_name, phone_number=phone_number)
                     return chat_id, chat_name, message
             else:
                 return False
