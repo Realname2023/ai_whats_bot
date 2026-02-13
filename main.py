@@ -72,7 +72,7 @@ async def main():
     await create_db()
     while True:
         data = await get_message()
-        print(data)
+        # print(data)
         if data:
             chat_id, chat_name, message = data
             await send_message(chat_id, chat_name, message)
