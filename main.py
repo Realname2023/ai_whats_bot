@@ -22,7 +22,12 @@ async def get_message():
                 receipt_id = api_answer.get("receiptId")
                 if receipt_id:
                     if api_answer["body"].get('typeWebhook') == 'incomingMessageReceived':
-                        message = api_answer["body"]["messageData"]["textMessageData"]["textMessage"]
+                        message_data = api_answer["body"]["messageData"]
+                        type_message = message_data.get("typeMessage")
+                        if type_message == "extendedTextMessage" or type_message == "quotedMessage":
+                            message = message_data['extendedTextMessageData']["text"]
+                        if type_message == "textMessage":
+                            message = message_data["textMessageData"]["textMessage"]
                         chat_id = api_answer["body"]["senderData"]["chatId"]
                         chat_name = api_answer["body"]["senderData"]["chatName"]
                         phone_number = chat_id.replace('@c.us', '')

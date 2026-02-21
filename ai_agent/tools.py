@@ -74,7 +74,8 @@ async def get_all_liquefied_gases() -> str:
     """
     items = await select_liquefied_gases()
     return '\n-------------------------\n'.join(f"""Фото: {item.photo} ID товара: {item.id}, 
-    название: {item.name}, единица измерения: {item.unit}, цена: {item.price} тенге""" for item in items)
+    название: {item.name}, единица измерения: {item.unit}, цена: {item.price} тенге, 
+    цена вместе с доставкой: {item.delivery_price} тенге, условия доставки: {item.delivery_terms},""" for item in items)
 
 
 @tool(args_schema=GoodBase)
